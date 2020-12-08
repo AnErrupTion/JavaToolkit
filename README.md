@@ -8,4 +8,4 @@ Current features include :<br/>
 - Working with arrays (removing duplicates, conversion)
 
 # WARNING
-This library was made with **IntelliJ IDEA 2020.2** and **AdoptOpenJDK 11**, and thus I **cannot guarantee** loading the source code will work as expected on other IDEs/other versions.
+This library was made with **IntelliJ IDEA 2020.2** and **AdoptOpenJDK 11**, and thus I **cannot guarantee** loading the source code will work as expected on other IDEs or versions.
