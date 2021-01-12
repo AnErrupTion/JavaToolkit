@@ -73,10 +73,17 @@ public class Request
         Request.contentType = contentType;
     }
 
-    public static HttpRequest.BodyPublisher ofFormData(Map<Object, Object> data) {
+    public static HttpClient.Builder getClientBuilder()
+    {
+        return client;
+    }
+
+    public static HttpRequest.BodyPublisher ofFormData(Map<Object, Object> data)
+    {
         StringBuilder builder = new StringBuilder();
 
-        for (Map.Entry<Object, Object> entry : data.entrySet()) {
+        for (Map.Entry<Object, Object> entry : data.entrySet())
+        {
             if (builder.length() > 0)
                 builder.append("&");
 
