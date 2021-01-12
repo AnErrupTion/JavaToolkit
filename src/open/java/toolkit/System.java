@@ -2,13 +2,15 @@ package open.java.toolkit;
 
 public class System
 {
-    public static String getProperty(String property)
+    public static boolean getPropertyContains(String property, String element, boolean lowerCase)
     {
-        return java.lang.System.getProperty(property);
+        String prop = java.lang.System.getProperty(property);
+        if (lowerCase) prop = prop.toLowerCase();
+        return prop.contains(element);
     }
 
     public static boolean isWindows()
     {
-        return getProperty("os.name").toLowerCase().contains("windows");
+        return getPropertyContains("os.name", "windows", true);
     }
 }
