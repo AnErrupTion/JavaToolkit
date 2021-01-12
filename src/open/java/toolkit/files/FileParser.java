@@ -56,7 +56,7 @@ public class FileParser
         }
     }
 
-    public String[] parseStringArray(String key) throws IOException
+    public String[] parseFile(String key)
     {
         try
         {

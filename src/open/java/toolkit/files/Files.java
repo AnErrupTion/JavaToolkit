@@ -6,7 +6,7 @@ public class Files
 {
     public static String readFile(String path) throws IOException
     {
-        try (BufferedReader br = new BufferedReader(new FileReader(new File(path))))
+        try (BufferedReader br = new BufferedReader(new FileReader(path)))
         {
             StringBuilder content = new StringBuilder();
             String line;
@@ -20,7 +20,7 @@ public class Files
 
     public static void writeFile(String path, String content, boolean append) throws IOException
     {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(path), append)))
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, append)))
         {
             bw.write(content);
         }
@@ -34,8 +34,7 @@ public class Files
 
     public static boolean createDirectory(String path)
     {
-        File f = new File(path);
-        return f.mkdir();
+        return new File(path).mkdir();
     }
 
     public static boolean directoryExists(String path)
