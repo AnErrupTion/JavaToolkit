@@ -32,7 +32,7 @@ public class Console
         if (System.isWindows() && showAnsiWarning)
             writeLine("ANSI codes are not officially implemented in the Windows console, thus the colors and other codes may not work as expected.", LogType.WARNING);
 
-        SOUT.printf(ansiStart + "[%s] %s", type.toString(), text);
+        SOUT.printf(ansiStart + "[%s] %s %s", type.toString(), text, Foreground.RESET);
     }
 
     public static void clear() throws IOException, InterruptedException
@@ -43,9 +43,16 @@ public class Console
             SOUT.print(Foreground.CLEAR);
     }
 
+    public static void setTitle(String text) throws IOException, InterruptedException
+    {
+        if (!System.isWindows())
+            SOUT.println("\033]2;" + text + "\007");
+        else
+            new ProcessBuilder("cmd", "/c", "title", text).inheritIO().start().waitFor();
+    }
+
     public static String readLine() throws IOException
     {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(SIN));
-        return reader.readLine();
+        return new BufferedReader(new InputStreamReader(SIN)).readLine();
     }
 }
