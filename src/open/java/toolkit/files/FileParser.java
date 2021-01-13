@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class FileParser
 {
-    public String[] file;
+    public String[] content;
     private String filePath, commentCharacter, separator;
     private boolean removeSpaces;
     private int index;
@@ -17,12 +17,12 @@ public class FileParser
         this.removeSpaces = removeSpaces;
         this.index = index;
 
-        file = Files.readFile(this.filePath).split("\n");
+        content = Files.readLines(this.filePath);
     }
 
     public String parseString(String key)
     {
-        for (String line : file)
+        for (String line : content)
             if (!line.startsWith(commentCharacter) && line.contains(key))
             {
                 String result = line.split(separator)[index];
@@ -60,7 +60,7 @@ public class FileParser
     {
         try
         {
-            String[] array = Files.readFile(key).split("\n");
+            String[] array = Files.readLines(key);
             return array != null && array.length > 0 ? array : null;
         }
         catch (Exception ex)
