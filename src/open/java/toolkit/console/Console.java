@@ -46,7 +46,7 @@ public class Console
     public static void setTitle(String text) throws IOException, InterruptedException
     {
         if (!System.isWindows())
-            java.lang.System.out.println("\033]2;" + text + "\007");
+            java.lang.System.out.print("\033]2;" + text + "\007");
         else
             new ProcessBuilder("cmd", "/c", "title", text).inheritIO().start().waitFor();
     }
