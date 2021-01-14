@@ -8,5 +8,6 @@ Features include :<br/>
 - Working with arrays (removing duplicates, conversion)
 - And more!
 
-# WARNING
-This library was made with **IntelliJ IDEA 2020.3** and **AdoptOpenJDK 11**, and thus I **cannot guarantee** loading the source code will work as expected on other IDEs or versions.
+# Requirements
+**IDE** IntelliJ IDEA 2020.3<br/>
+**AdoptOpenJDK** 11
