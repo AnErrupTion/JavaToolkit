@@ -7,8 +7,6 @@ import java.io.*;
 
 public class Console
 {
-    public static boolean showAnsiWarning = true;
-
     public static void writeLine(String text, LogType type)
     {
         write(text + System.newLine, type);
@@ -26,9 +24,6 @@ public class Console
 
     public static void ansiWrite(String ansiStart, String text, LogType type)
     {
-        if (System.isWindows() && showAnsiWarning)
-            writeLine("ANSI codes are not officially implemented in the Windows console, thus the colors and other codes may not work as expected.", LogType.WARNING);
-
         java.lang.System.out.printf(ansiStart + "[%s] %s %s", type.toString(), text, Foreground.RESET);
     }
 
