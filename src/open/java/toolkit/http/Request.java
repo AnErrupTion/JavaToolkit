@@ -16,7 +16,9 @@ import java.util.concurrent.Executor;
 public class Request
 {
     private static final HttpClient.Builder client = HttpClient.newBuilder();
+    private static HttpClient built = null;
     private static String contentType = "application/x-www-form-urlencoded";
+    private static String userAgent = "Mozilla/5.0";
 
     public static void setVersion(HttpClient.Version version)
     {
@@ -73,6 +75,22 @@ public class Request
         Request.contentType = contentType;
     }
 
+    public static void setUserAgent(String userAgent)
+    {
+        Request.userAgent = userAgent;
+    }
+
+    public static void setProxy(String proxy)
+    {
+        String[] array = proxy.split(":");
+        client.proxy(ProxySelector.of(new InetSocketAddress(array[0], Integer.parseInt(array[1]))));
+    }
+
+    public static void forceBuild()
+    {
+        built = client.build();
+    }
+
     public static HttpClient.Builder getClientBuilder()
     {
         return client;
@@ -100,11 +118,14 @@ public class Request
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create(url))
-                .setHeader("User-Agent", "Mozilla/5.0")
-                .header("Content-Type", contentType)
+                .setHeader("User-Agent", userAgent)
+                .setHeader("Content-Type", contentType)
                 .build();
 
-        return client.build().send(request, HttpResponse.BodyHandlers.ofString());
+        if (built == null)
+            built = client.build();
+
+        return built.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
     public static HttpResponse<String> sendPost(String url, Map<Object, Object> formData) throws IOException, InterruptedException
@@ -112,11 +133,14 @@ public class Request
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(ofFormData(formData))
                 .uri(URI.create(url))
-                .setHeader("User-Agent", "Mozilla/5.0")
-                .header("Content-Type", contentType)
+                .setHeader("User-Agent", userAgent)
+                .setHeader("Content-Type", contentType)
                 .build();
 
-        return client.build().send(request, HttpResponse.BodyHandlers.ofString());
+        if (built == null)
+            built = client.build();
+
+        return built.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
     public static CompletableFuture<HttpResponse<String>> sendGetAsync(String url)
@@ -124,10 +148,14 @@ public class Request
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create(url))
-                .setHeader("User-Agent", "Mozilla/5.0")
+                .setHeader("User-Agent", userAgent)
+                .setHeader("Content-Type", contentType)
                 .build();
 
-        return client.build().sendAsync(request, HttpResponse.BodyHandlers.ofString());
+        if (built == null)
+            built = client.build();
+
+        return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 
     public static CompletableFuture<HttpResponse<String>> sendPostAsync(String url, Map<Object, Object> formData)
@@ -135,10 +163,13 @@ public class Request
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(ofFormData(formData))
                 .uri(URI.create(url))
-                .setHeader("User-Agent", "Mozilla/5.0")
-                .header("Content-Type", contentType)
+                .setHeader("User-Agent", userAgent)
+                .setHeader("Content-Type", contentType)
                 .build();
 
-        return client.build().sendAsync(request, HttpResponse.BodyHandlers.ofString());
+        if (built == null)
+            built = client.build();
+
+        return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 }
