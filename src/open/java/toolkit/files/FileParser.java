@@ -20,7 +20,7 @@ public class FileParser
         content = Files.readLines(this.filePath);
     }
 
-    public String parseString(String key)
+    public String getString(String key)
     {
         for (String line : content)
             if (!line.startsWith(commentCharacter) && line.contains(key))
@@ -32,11 +32,34 @@ public class FileParser
         return null;
     }
 
-    public int parseInt(String key)
+    public void setString(String key, String value) throws IOException
+    {
+        for (int i = 0; i < content.length; i++)
+        {
+            String line = content[i];
+            if (!line.startsWith(commentCharacter) && line.contains(key))
+            {
+                String result = line.split(separator)[index];
+                String copy = result;
+
+                if (removeSpaces)
+                    result = result.replace(" ", "");
+
+                result = value;
+                content[i] = line.replace(copy, result);
+
+                break;
+            }
+        }
+
+        Files.writeLines(filePath, content, false);
+    }
+
+    public int getInt(String key)
     {
         try
         {
-            return Integer.parseInt(parseString(key));
+            return Integer.parseInt(getString(key));
         }
         catch (Exception ex)
         {
@@ -44,11 +67,16 @@ public class FileParser
         }
     }
 
-    public boolean parseBoolean(String key)
+    public void setInt(String key, int value) throws IOException
+    {
+        setString(key, String.valueOf(value));
+    }
+
+    public boolean getBoolean(String key)
     {
         try
         {
-            return Boolean.parseBoolean(parseString(key));
+            return Boolean.parseBoolean(getString(key));
         }
         catch (Exception ex)
         {
@@ -56,7 +84,12 @@ public class FileParser
         }
     }
 
-    public String[] parseFile(String key)
+    public void setBoolean(String key, boolean value) throws IOException
+    {
+        setString(key, String.valueOf(value));
+    }
+
+    public String[] getFile(String key)
     {
         try
         {
