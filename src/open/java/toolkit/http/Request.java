@@ -15,59 +15,59 @@ import java.util.concurrent.Executor;
 
 public class Request
 {
-    private static final HttpClient.Builder client = HttpClient.newBuilder();
+    private static HttpClient.Builder client = HttpClient.newBuilder();
     private static HttpClient built = null;
     private static String contentType = "application/x-www-form-urlencoded";
     private static String userAgent = "Mozilla/5.0";
 
     public static void setVersion(HttpClient.Version version)
     {
-        client.version(version);
+        client = client.version(version);
     }
 
     public static void setTimeout(int timeout)
     {
-        client.connectTimeout(Duration.ofMillis(timeout));
+        client = client.connectTimeout(Duration.ofMillis(timeout));
     }
 
     public static void setFollowRedirects(HttpClient.Redirect redirect)
     {
-        client.followRedirects(redirect);
+        client = client.followRedirects(redirect);
     }
 
     public static void setProxy(ProxySelector proxy)
     {
-        client.proxy(proxy);
+        client = client.proxy(proxy);
     }
 
     public static void setAuthenticator(Authenticator auth)
     {
-        client.authenticator(auth);
+        client = client.authenticator(auth);
     }
 
     public static void setCookieHandler(CookieHandler handler)
     {
-        client.cookieHandler(handler);
+        client = client.cookieHandler(handler);
     }
 
     public static void setExecutor(Executor executor)
     {
-        client.executor(executor);
+        client = client.executor(executor);
     }
 
     public static void setPriority(int priority)
     {
-        client.priority(priority);
+        client = client.priority(priority);
     }
 
     public static void setSslContext(SSLContext context)
     {
-        client.sslContext(context);
+        client = client.sslContext(context);
     }
 
     public static void setSslParameters(SSLParameters parameters)
     {
-        client.sslParameters(parameters);
+        client = client.sslParameters(parameters);
     }
 
     public static void setContentType(String contentType)
@@ -83,7 +83,7 @@ public class Request
     public static void setProxy(String proxy)
     {
         String[] array = proxy.split(":");
-        client.proxy(ProxySelector.of(new InetSocketAddress(array[0], Integer.parseInt(array[1]))));
+        client = client.proxy(ProxySelector.of(new InetSocketAddress(array[0], Integer.parseInt(array[1]))));
     }
 
     public static void forceBuild()
