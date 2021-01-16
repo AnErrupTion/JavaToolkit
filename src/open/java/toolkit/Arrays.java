@@ -21,4 +21,9 @@ public class Arrays
     {
         return java.util.Arrays.stream(input).toArray(String[]::new);
     }
+
+    public static boolean isEmpty(Object[] array)
+    {
+        return array == null && array.length <= 0;
+    }
 }
