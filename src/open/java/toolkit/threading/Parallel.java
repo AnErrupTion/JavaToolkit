@@ -15,12 +15,18 @@ public class Parallel
         void perform(T parameter) throws IOException, InterruptedException;
     }
 
-    public static ExecutorService pool;
+    public static ExecutorService pool = null;
     public static int threads = 25;
+    private static int lastThreads = 0;
 
     public static <T> void forEach(final T[] elements, final Operation<T> operation) throws InterruptedException
     {
-        pool = Executors.newFixedThreadPool(threads);
+        if (pool == null || lastThreads != threads)
+        {
+            pool = Executors.newFixedThreadPool(threads);
+            lastThreads = threads;
+        }
+
         pool.invokeAll(createCallables(elements, operation));
     }
 
