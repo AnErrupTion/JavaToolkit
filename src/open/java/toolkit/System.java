@@ -3,7 +3,7 @@ package open.java.toolkit;
 public class System
 {
     public static String newLine = System.isWindows() ? "\r\n" : "\n";
-    public static String toolkitVersion = "pre-v1.2";
+    public static String toolkitVersion = "v1.3";
 
     public static boolean getPropertyContains(String property, String element, boolean lowerCase)
     {
