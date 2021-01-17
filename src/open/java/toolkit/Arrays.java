@@ -26,4 +26,9 @@ public class Arrays
     {
         return array == null || array.length <= 0;
     }
+
+    public static String toString(List<String> input)
+    {
+        return java.util.Arrays.toString(input.toArray(new String[0])).replace("[", "").replace("]", "").replace(", ", System.newLine);
+    }
 }
