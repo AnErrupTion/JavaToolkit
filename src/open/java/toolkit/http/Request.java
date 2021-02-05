@@ -142,6 +142,19 @@ public class Request
 
         return built.send(request, HttpResponse.BodyHandlers.ofString());
     }
+    
+    public static HttpResponse<String> sendPost(String url, String formData) throws IOException, InterruptedException
+    {
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(formData))
+                .uri(URI.create(url))
+                .setHeader("User-Agent", userAgent)
+                .setHeader("Content-Type", contentType)
+                .build();
+        if (built == null)
+            built = client.build();
+        return built.send(request, HttpResponse.BodyHandlers.ofString());
+    }
 
     public static CompletableFuture<HttpResponse<String>> sendGetAsync(String url)
     {
@@ -170,6 +183,19 @@ public class Request
         if (built == null)
             built = client.build();
 
+        return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+    }
+    
+    public static CompletableFuture<HttpResponse<String>> sendPostAsync(String url, String formData)
+    {
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(formData))
+                .uri(URI.create(url))
+                .setHeader("User-Agent", userAgent)
+                .setHeader("Content-Type", contentType)
+                .build();
+        if (built == null)
+            built = client.build();
         return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 }
