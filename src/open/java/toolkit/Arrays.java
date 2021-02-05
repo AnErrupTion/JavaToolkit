@@ -29,6 +29,6 @@ public class Arrays
 
     public static String toString(List<String> input)
     {
-        return java.util.Arrays.toString(input.toArray(new String[0])).replace("[", "").replace("]", "").replace(", ", System.newLine);
+        return java.util.Arrays.toString(input.toArray(String[]::new)).replace("[", "").replace("]", "").replace(", ", System.newLine);
     }
 }
