@@ -91,4 +91,9 @@ public class Files
         File f = new File(path);
         return f.isDirectory() && f.exists();
     }
+    
+    public static boolean delete(String path)
+    {
+        return new File(path).delete();
+    }
 }
