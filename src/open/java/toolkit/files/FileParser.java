@@ -1,13 +1,15 @@
 package open.java.toolkit.files;
 
+import open.java.toolkit.Arrays;
+
 import java.io.IOException;
 
 public class FileParser
 {
-    public String[] content;
-    private String filePath, commentCharacter, separator;
-    private boolean removeSpaces;
-    private int index;
+    private final String[] content;
+    private final String filePath, commentCharacter, separator;
+    private final boolean removeSpaces;
+    private final int index;
 
     public FileParser(String filePath, String commentCharacter, String separator, boolean removeSpaces, int index) throws IOException
     {
@@ -22,12 +24,15 @@ public class FileParser
 
     public String getString(String key)
     {
-        for (String line : content)
+        for (int i = 0; i < content.length; i++)
+        {
+            String line = content[i];
             if (!line.startsWith(commentCharacter) && line.contains(key))
             {
                 String result = line.split(separator)[index];
                 return removeSpaces ? result.replace(" ", "") : result;
             }
+        }
 
         return null;
     }
@@ -40,14 +45,7 @@ public class FileParser
             if (!line.startsWith(commentCharacter) && line.contains(key))
             {
                 String result = line.split(separator)[index];
-                String copy = result;
-
-                if (removeSpaces)
-                    result = result.replace(" ", "");
-
-                result = value;
-                content[i] = line.replace(copy, result);
-
+                content[i] = line.replace(result, " " + value);
                 break;
             }
         }
