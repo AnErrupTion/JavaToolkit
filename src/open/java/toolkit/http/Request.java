@@ -17,8 +17,8 @@ public class Request
 {
     private static HttpClient.Builder client = HttpClient.newBuilder();
     private static HttpClient built = null;
-    private static String contentType = "application/x-www-form-urlencoded";
-    private static String userAgent = "Mozilla/5.0";
+    private static String contentType = "application/html; charset=UTF-8";
+    private static String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36";
 
     public static void setVersion(HttpClient.Version version)
     {
@@ -142,7 +142,7 @@ public class Request
 
         return built.send(request, HttpResponse.BodyHandlers.ofString());
     }
-    
+
     public static HttpResponse<String> sendPost(String url, String formData) throws IOException, InterruptedException
     {
         HttpRequest request = HttpRequest.newBuilder()
@@ -151,8 +151,10 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
+
         if (built == null)
             built = client.build();
+
         return built.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
@@ -185,7 +187,7 @@ public class Request
 
         return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
-    
+
     public static CompletableFuture<HttpResponse<String>> sendPostAsync(String url, String formData)
     {
         HttpRequest request = HttpRequest.newBuilder()
@@ -194,8 +196,10 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
+
         if (built == null)
             built = client.build();
+
         return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 }
