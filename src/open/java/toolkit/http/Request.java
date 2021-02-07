@@ -1,5 +1,7 @@
 package open.java.toolkit.http;
 
+import open.java.toolkit.Errors;
+
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
 import java.io.IOException;
@@ -113,7 +115,7 @@ public class Request
         return HttpRequest.BodyPublishers.ofString(builder.toString());
     }
 
-    public static HttpResponse<String> sendGet(String url) throws IOException, InterruptedException
+    public static HttpResponse<String> sendGet(String url)
     {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
@@ -125,10 +127,15 @@ public class Request
         if (built == null)
             built = client.build();
 
-        return built.send(request, HttpResponse.BodyHandlers.ofString());
+        try
+        {
+            return built.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException ex) { Errors.newError(ex.getMessage()); }
+
+        return null;
     }
 
-    public static HttpResponse<String> sendPost(String url, Map<Object, Object> formData) throws IOException, InterruptedException
+    public static HttpResponse<String> sendPost(String url, Map<Object, Object> formData)
     {
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(ofFormData(formData))
@@ -140,10 +147,15 @@ public class Request
         if (built == null)
             built = client.build();
 
-        return built.send(request, HttpResponse.BodyHandlers.ofString());
+        try
+        {
+            return built.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException ex) { Errors.newError(ex.getMessage()); }
+
+        return null;
     }
 
-    public static HttpResponse<String> sendPost(String url, String formData) throws IOException, InterruptedException
+    public static HttpResponse<String> sendPost(String url, String formData)
     {
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(formData))
@@ -155,7 +167,12 @@ public class Request
         if (built == null)
             built = client.build();
 
-        return built.send(request, HttpResponse.BodyHandlers.ofString());
+        try
+        {
+            return built.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException ex) { Errors.newError(ex.getMessage()); }
+
+        return null;
     }
 
     public static CompletableFuture<HttpResponse<String>> sendGetAsync(String url)
