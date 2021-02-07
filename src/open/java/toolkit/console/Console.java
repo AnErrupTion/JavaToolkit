@@ -1,5 +1,6 @@
 package open.java.toolkit.console;
 
+import open.java.toolkit.Errors;
 import open.java.toolkit.System;
 import open.java.toolkit.console.ansi.Foreground;
 
@@ -27,10 +28,15 @@ public class Console
         java.lang.System.out.printf(ansiStart + "[%s] %s %s", type.toString(), text, Foreground.RESET);
     }
 
-    public static void clear() throws IOException, InterruptedException
+    public static void clear()
     {
         if (System.isWindows())
-            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        {
+            try
+            {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } catch (IOException | InterruptedException ex) { Errors.newError(ex.getMessage()); }
+        }
         else
         {
             java.lang.System.out.print(Foreground.CLEAR);
@@ -38,16 +44,24 @@ public class Console
         }
     }
 
-    public static void setTitle(String text) throws IOException, InterruptedException
+    public static void setTitle(String text)
     {
-        if (!System.isWindows())
-            java.lang.System.out.print("\033]2;" + text + "\007");
-        else
-            new ProcessBuilder("cmd", "/c", "title", text).inheritIO().start().waitFor();
+        if (System.isWindows())
+        {
+            try
+            {
+                new ProcessBuilder("cmd", "/c", "title", text).inheritIO().start().waitFor();
+            } catch (IOException | InterruptedException ex) { Errors.newError(ex.getMessage()); }
+        } else java.lang.System.out.print("\033]2;" + text + "\007");
     }
 
-    public static String readLine() throws IOException
+    public static String readLine()
     {
-        return new BufferedReader(new InputStreamReader(java.lang.System.in)).readLine();
+        try
+        {
+            return new BufferedReader(new InputStreamReader(java.lang.System.in)).readLine();
+        } catch (IOException ex) { Errors.newError(ex.getMessage()); }
+
+        return null;
     }
 }
