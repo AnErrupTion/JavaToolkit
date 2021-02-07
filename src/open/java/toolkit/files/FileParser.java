@@ -2,8 +2,6 @@ package open.java.toolkit.files;
 
 import open.java.toolkit.Arrays;
 
-import java.io.IOException;
-
 public class FileParser
 {
     private final String[] content;
@@ -11,7 +9,7 @@ public class FileParser
     private final boolean removeSpaces;
     private final int index;
 
-    public FileParser(String filePath, String commentCharacter, String separator, boolean removeSpaces, int index) throws IOException
+    public FileParser(String filePath, String commentCharacter, String separator, boolean removeSpaces, int index)
     {
         this.filePath = filePath;
         this.commentCharacter = commentCharacter;
@@ -24,20 +22,17 @@ public class FileParser
 
     public String getString(String key)
     {
-        for (int i = 0; i < content.length; i++)
-        {
-            String line = content[i];
+        for (String line : content)
             if (!line.startsWith(commentCharacter) && line.contains(key))
             {
                 String result = line.split(separator)[index];
                 return removeSpaces ? result.replace(" ", "") : result;
             }
-        }
 
         return null;
     }
 
-    public void setString(String key, String value) throws IOException
+    public void setString(String key, String value)
     {
         for (int i = 0; i < content.length; i++)
         {
@@ -65,7 +60,7 @@ public class FileParser
         }
     }
 
-    public void setInt(String key, int value) throws IOException
+    public void setInt(String key, int value)
     {
         setString(key, String.valueOf(value));
     }
@@ -82,7 +77,7 @@ public class FileParser
         }
     }
 
-    public void setBoolean(String key, boolean value) throws IOException
+    public void setBoolean(String key, boolean value)
     {
         setString(key, String.valueOf(value));
     }
