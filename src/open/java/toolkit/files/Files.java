@@ -60,9 +60,6 @@ public class Files
 
     public static void writeString(String path, String content, boolean append)
     {
-        if (!fileExists(path))
-            createFile(path);
-
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, append)))
         {
             bw.write(content);
@@ -71,9 +68,6 @@ public class Files
 
     public static void writeLines(String path, String[] content, boolean append)
     {
-        if (!fileExists(path))
-            createFile(path);
-
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, append)))
         {
             for (String str : content)
