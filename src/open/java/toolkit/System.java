@@ -1,16 +1,12 @@
 package open.java.toolkit;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 public class System
 {
-    public static String newLine = System.isWindows() ? "\r\n" : "\n";
-    public static String toolkitVersion = "1.3";
-    public static String dateAndTime = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
-
+    public static final String newLine = System.isWindows() ? "\r\n" : "\n";
+    public static final String toolkitVersion = "1.3";
+    public static final String dateAndTime = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss").format(LocalDateTime.now());
     public static boolean logErrors = false, errorOccured = false;
-
     public static boolean getPropertyContains(String property, String element, boolean lowerCase)
     {
         String prop = java.lang.System.getProperty(property);
