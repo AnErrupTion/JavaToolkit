@@ -1,6 +1,7 @@
 package open.java.toolkit.files;
 
 import open.java.toolkit.Arrays;
+import open.java.toolkit.Errors;
 
 public class FileParser
 {
@@ -8,7 +9,7 @@ public class FileParser
     private final String filePath, commentCharacter, separator;
     private final boolean removeSpaces;
     private final int index;
-
+    
     public FileParser(String filePath, String commentCharacter, String separator, boolean removeSpaces, int index)
     {
         this.filePath = filePath;
@@ -16,7 +17,6 @@ public class FileParser
         this.separator = separator;
         this.removeSpaces = removeSpaces;
         this.index = index;
-
         content = Files.readLines(this.filePath);
     }
 
@@ -56,6 +56,7 @@ public class FileParser
         }
         catch (Exception ex)
         {
+            Errors.newError(ex);
             return 0;
         }
     }
@@ -73,6 +74,7 @@ public class FileParser
         }
         catch (Exception ex)
         {
+            Errors.newError(ex);
             return false;
         }
     }
@@ -91,6 +93,7 @@ public class FileParser
         }
         catch (Exception ex)
         {
+            Errors.newError(ex);
             return null;
         }
     }
