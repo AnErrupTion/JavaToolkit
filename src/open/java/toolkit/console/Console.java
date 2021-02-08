@@ -3,7 +3,6 @@ package open.java.toolkit.console;
 import open.java.toolkit.Errors;
 import open.java.toolkit.System;
 import open.java.toolkit.console.ansi.Foreground;
-
 import java.io.*;
 
 public class Console
@@ -35,7 +34,7 @@ public class Console
             try
             {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } catch (IOException | InterruptedException ex) { Errors.newError(ex.getMessage()); }
+            } catch (IOException | InterruptedException ex) { Errors.newError(ex); }
         }
         else
         {
@@ -51,7 +50,7 @@ public class Console
             try
             {
                 new ProcessBuilder("cmd", "/c", "title", text).inheritIO().start().waitFor();
-            } catch (IOException | InterruptedException ex) { Errors.newError(ex.getMessage()); }
+            } catch (IOException | InterruptedException ex) { Errors.newError(ex); }
         } else java.lang.System.out.print("\033]2;" + text + "\007");
     }
 
@@ -60,7 +59,7 @@ public class Console
         try
         {
             return new BufferedReader(new InputStreamReader(java.lang.System.in)).readLine();
-        } catch (IOException ex) { Errors.newError(ex.getMessage()); }
+        } catch (IOException ex) { Errors.newError(ex); }
 
         return null;
     }
