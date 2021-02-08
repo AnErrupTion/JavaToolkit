@@ -1,7 +1,6 @@
 package open.java.toolkit.threading;
 
 import open.java.toolkit.Errors;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -20,7 +19,7 @@ public class Parallel
     public static ExecutorService pool = null;
     public static int threads = 25;
     private static int lastThreads = 0;
-
+    
     public static <T> void forEach(final T[] elements, final Operation<T> operation)
     {
         if (pool == null || lastThreads != threads)
@@ -32,7 +31,7 @@ public class Parallel
         try
         {
             pool.invokeAll(createCallables(elements, operation));
-        } catch (InterruptedException ex) { Errors.newError(ex.getMessage()); }
+        } catch (InterruptedException ex) { Errors.newError(ex); }
     }
 
     private static <T> Collection<Callable<Void>> createCallables(final T[] elements, final Operation<T> operation)
