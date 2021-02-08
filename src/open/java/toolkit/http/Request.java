@@ -1,27 +1,26 @@
 package open.java.toolkit.http;
-
 import open.java.toolkit.Errors;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
+import javax.net.ssl.SSLSession;
 import java.io.IOException;
 import java.net.*;
 import java.net.http.HttpClient;
+import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-
 public class Request
 {
     private static HttpClient.Builder client = HttpClient.newBuilder();
     private static HttpClient built = null;
     private static String contentType = "text/html; charset=UTF-8";
     private static String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36";
-
     public static void setVersion(HttpClient.Version version)
     {
         client = client.version(version);
@@ -101,12 +100,10 @@ public class Request
     public static HttpRequest.BodyPublisher ofFormData(Map<Object, Object> data)
     {
         StringBuilder builder = new StringBuilder();
-
         for (Map.Entry<Object, Object> entry : data.entrySet())
         {
             if (builder.length() > 0)
                 builder.append("&");
-
             builder.append(URLEncoder.encode(entry.getKey().toString(), StandardCharsets.UTF_8));
             builder.append("=");
             builder.append(URLEncoder.encode(entry.getValue().toString(), StandardCharsets.UTF_8));
@@ -123,16 +120,63 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
-
         if (built == null)
             built = client.build();
-
         try
         {
             return built.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException ex) { Errors.newError(ex.getMessage()); }
+        } catch (IOException | InterruptedException ex) { Errors.newError(ex); }
 
-        return null;
+        return new HttpResponse<>()
+        {
+            @Override
+            public int statusCode()
+            {
+                return 0;
+            }
+
+            @Override
+            public HttpRequest request()
+            {
+                return null;
+            }
+
+            @Override
+            public Optional<HttpResponse<String>> previousResponse()
+            {
+                return Optional.empty();
+            }
+
+            @Override
+            public HttpHeaders headers()
+            {
+                return null;
+            }
+
+            @Override
+            public String body()
+            {
+                return "";
+            }
+
+            @Override
+            public Optional<SSLSession> sslSession()
+            {
+                return Optional.empty();
+            }
+
+            @Override
+            public URI uri()
+            {
+                return null;
+            }
+
+            @Override
+            public HttpClient.Version version()
+            {
+                return null;
+            }
+        };
     }
 
     public static HttpResponse<String> sendPost(String url, Map<Object, Object> formData)
@@ -143,16 +187,63 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
-
         if (built == null)
             built = client.build();
-
         try
         {
             return built.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException ex) { Errors.newError(ex.getMessage()); }
+        } catch (IOException | InterruptedException ex) { Errors.newError(ex); }
 
-        return null;
+        return new HttpResponse<>()
+        {
+            @Override
+            public int statusCode()
+            {
+                return 0;
+            }
+
+            @Override
+            public HttpRequest request()
+            {
+                return null;
+            }
+
+            @Override
+            public Optional<HttpResponse<String>> previousResponse()
+            {
+                return Optional.empty();
+            }
+
+            @Override
+            public HttpHeaders headers()
+            {
+                return null;
+            }
+
+            @Override
+            public String body()
+            {
+                return "";
+            }
+
+            @Override
+            public Optional<SSLSession> sslSession()
+            {
+                return Optional.empty();
+            }
+
+            @Override
+            public URI uri()
+            {
+                return null;
+            }
+
+            @Override
+            public HttpClient.Version version()
+            {
+                return null;
+            }
+        };
     }
 
     public static HttpResponse<String> sendPost(String url, String formData)
@@ -163,16 +254,63 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
-
         if (built == null)
             built = client.build();
-
         try
         {
             return built.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException ex) { Errors.newError(ex.getMessage()); }
+        } catch (IOException | InterruptedException ex) { Errors.newError(ex); }
 
-        return null;
+        return new HttpResponse<>()
+        {
+            @Override
+            public int statusCode()
+            {
+                return 0;
+            }
+
+            @Override
+            public HttpRequest request()
+            {
+                return null;
+            }
+
+            @Override
+            public Optional<HttpResponse<String>> previousResponse()
+            {
+                return Optional.empty();
+            }
+
+            @Override
+            public HttpHeaders headers()
+            {
+                return null;
+            }
+
+            @Override
+            public String body()
+            {
+                return "";
+            }
+
+            @Override
+            public Optional<SSLSession> sslSession()
+            {
+                return Optional.empty();
+            }
+
+            @Override
+            public URI uri()
+            {
+                return null;
+            }
+
+            @Override
+            public HttpClient.Version version()
+            {
+                return null;
+            }
+        };
     }
 
     public static CompletableFuture<HttpResponse<String>> sendGetAsync(String url)
@@ -183,10 +321,8 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
-
         if (built == null)
             built = client.build();
-
         return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 
@@ -198,10 +334,8 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
-
         if (built == null)
             built = client.build();
-
         return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 
@@ -213,10 +347,8 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
-
         if (built == null)
             built = client.build();
-
         return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 }
