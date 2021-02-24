@@ -1,5 +1,7 @@
 package open.java.toolkit.http;
+
 import open.java.toolkit.Errors;
+
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
 import javax.net.ssl.SSLSession;
@@ -15,12 +17,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+
 public class Request
 {
     private static HttpClient.Builder client = HttpClient.newBuilder();
     private static HttpClient built = null;
     private static String contentType = "text/html; charset=UTF-8";
     private static String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36";
+
     public static void setVersion(HttpClient.Version version)
     {
         client = client.version(version);
@@ -100,10 +104,12 @@ public class Request
     public static HttpRequest.BodyPublisher ofFormData(Map<Object, Object> data)
     {
         StringBuilder builder = new StringBuilder();
+
         for (Map.Entry<Object, Object> entry : data.entrySet())
         {
             if (builder.length() > 0)
                 builder.append("&");
+
             builder.append(URLEncoder.encode(entry.getKey().toString(), StandardCharsets.UTF_8));
             builder.append("=");
             builder.append(URLEncoder.encode(entry.getValue().toString(), StandardCharsets.UTF_8));
@@ -120,8 +126,10 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
+
         if (built == null)
             built = client.build();
+
         try
         {
             return built.send(request, HttpResponse.BodyHandlers.ofString());
@@ -138,7 +146,7 @@ public class Request
             @Override
             public HttpRequest request()
             {
-                return null;
+                return request;
             }
 
             @Override
@@ -168,13 +176,13 @@ public class Request
             @Override
             public URI uri()
             {
-                return null;
+                return URI.create("https://www.google.com");
             }
 
             @Override
             public HttpClient.Version version()
             {
-                return null;
+                return HttpClient.Version.HTTP_1_1;
             }
         };
     }
@@ -187,8 +195,10 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
+
         if (built == null)
             built = client.build();
+
         try
         {
             return built.send(request, HttpResponse.BodyHandlers.ofString());
@@ -205,7 +215,7 @@ public class Request
             @Override
             public HttpRequest request()
             {
-                return null;
+                return request;
             }
 
             @Override
@@ -235,13 +245,13 @@ public class Request
             @Override
             public URI uri()
             {
-                return null;
+                return URI.create("https://www.google.com");
             }
 
             @Override
             public HttpClient.Version version()
             {
-                return null;
+                return HttpClient.Version.HTTP_1_1;
             }
         };
     }
@@ -254,8 +264,10 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
+
         if (built == null)
             built = client.build();
+
         try
         {
             return built.send(request, HttpResponse.BodyHandlers.ofString());
@@ -272,7 +284,7 @@ public class Request
             @Override
             public HttpRequest request()
             {
-                return null;
+                return request;
             }
 
             @Override
@@ -302,13 +314,13 @@ public class Request
             @Override
             public URI uri()
             {
-                return null;
+                return URI.create("https://www.google.com");
             }
 
             @Override
             public HttpClient.Version version()
             {
-                return null;
+                return HttpClient.Version.HTTP_1_1;
             }
         };
     }
@@ -321,8 +333,10 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
+
         if (built == null)
             built = client.build();
+
         return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 
@@ -334,8 +348,10 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
+
         if (built == null)
             built = client.build();
+
         return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 
@@ -347,8 +363,10 @@ public class Request
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType)
                 .build();
+
         if (built == null)
             built = client.build();
+
         return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 }

@@ -3,6 +3,7 @@ package open.java.toolkit.console;
 import open.java.toolkit.Errors;
 import open.java.toolkit.System;
 import open.java.toolkit.console.ansi.Foreground;
+
 import java.io.*;
 
 public class Console

@@ -1,6 +1,7 @@
 package open.java.toolkit.threading;
 
 import open.java.toolkit.Errors;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -19,7 +20,7 @@ public class Parallel
     public static ExecutorService pool = null;
     public static int threads = 25;
     private static int lastThreads = 0;
-    
+
     public static <T> void forEach(final T[] elements, final Operation<T> operation)
     {
         if (pool == null || lastThreads != threads)

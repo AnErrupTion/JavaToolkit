@@ -8,9 +8,9 @@ public class System
     public static final String newLine = System.isWindows() ? "\r\n" : "\n";
     public static final String toolkitVersion = "1.3";
     public static final String dateAndTime = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss").format(LocalDateTime.now());
-    
+
     public static boolean logErrors = false, errorOccured = false, showErrors = true;
-    
+
     public static boolean getPropertyContains(String property, String element, boolean lowerCase)
     {
         String prop = java.lang.System.getProperty(property);

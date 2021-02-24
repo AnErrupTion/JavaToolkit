@@ -9,7 +9,7 @@ public class FileParser
     private final String filePath, commentCharacter, separator;
     private final boolean removeSpaces;
     private final int index;
-    
+
     public FileParser(String filePath, String commentCharacter, String separator, boolean removeSpaces, int index)
     {
         this.filePath = filePath;
@@ -17,6 +17,7 @@ public class FileParser
         this.separator = separator;
         this.removeSpaces = removeSpaces;
         this.index = index;
+
         content = Files.readLines(this.filePath);
     }
 

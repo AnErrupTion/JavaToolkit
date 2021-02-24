@@ -3,6 +3,7 @@ package open.java.toolkit.files;
 import open.java.toolkit.Arrays;
 import open.java.toolkit.Errors;
 import open.java.toolkit.System;
+
 import java.io.*;
 
 public class Files
@@ -13,8 +14,10 @@ public class Files
         {
             StringBuilder content = new StringBuilder();
             String line;
+
             while ((line = br.readLine()) != null)
                 content.append(line).append("\n");
+
             return content.toString();
         } catch (IOException ex) { Errors.newError(ex); }
 
@@ -35,14 +38,17 @@ public class Files
     {
         File file = new File(path);
         FileInputStream input = null;
+
         try
         {
             input = new FileInputStream(file);
         } catch (FileNotFoundException ex) { Errors.newError(ex); }
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
+
         byte[] b = new byte[(int) file.length()];
         int c;
+
         try
         {
             while ((c = input.read(b)) != -1)
