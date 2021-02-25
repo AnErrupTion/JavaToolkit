@@ -3,11 +3,15 @@ package open.java.toolkit.console;
 import open.java.toolkit.Errors;
 import open.java.toolkit.System;
 import open.java.toolkit.console.ansi.Foreground;
+import open.java.toolkit.diagnostics.Process;
 
 import java.io.*;
 
 public class Console
 {
+    private static final ProcessBuilder cls = Process.createProcess("cmd", "/c", "cls");
+    private static final ProcessBuilder title = Process.createProcess("cmd", "/c", "title");
+
     public static void writeLine(String text, LogType type)
     {
         write(text + System.newLine, type);
@@ -34,7 +38,7 @@ public class Console
         {
             try
             {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                cls.start().waitFor();
             } catch (IOException | InterruptedException ex) { Errors.newError(ex); }
         }
         else
@@ -50,7 +54,8 @@ public class Console
         {
             try
             {
-                new ProcessBuilder("cmd", "/c", "title", text).inheritIO().start().waitFor();
+                title.command("cmd", "/c", "title", text);
+                title.start().waitFor();
             } catch (IOException | InterruptedException ex) { Errors.newError(ex); }
         } else java.lang.System.out.print("\033]2;" + text + "\007");
     }
