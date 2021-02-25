@@ -10,7 +10,7 @@ public class Errors
     // Should be invoked ONLY when an exception occurs in JavaToolkit.
     public static void newError(Exception ex)
     {
-        System.errorOccured = true;
+        System.errorOccurred = true;
 
         if (System.showErrors)
             java.lang.System.err.println(Foreground.RED_BOLD_BRIGHT + "[JAVATOOLKIT EXCEPTION] " + ex.getMessage());
