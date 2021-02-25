@@ -88,7 +88,7 @@ public class Request
     public static void setProxy(String proxy)
     {
         String[] array = proxy.split(":");
-        client = client.proxy(ProxySelector.of(new InetSocketAddress(array[0], Integer.parseInt(array[1]))));
+        setProxy(ProxySelector.of(new InetSocketAddress(array[0], Integer.parseInt(array[1]))));
     }
 
     public static void forceBuild()
