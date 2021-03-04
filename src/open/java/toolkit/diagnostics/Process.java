@@ -5,9 +5,12 @@ import java.util.stream.Stream;
 
 public class Process
 {
-    public static ProcessBuilder createProcess(String... cmd)
+    public static ProcessBuilder createProcess(String cmd, boolean inheritIO)
     {
-        return new ProcessBuilder(cmd).inheritIO();
+        ProcessBuilder builder = new ProcessBuilder(cmd.split(" "));
+        if (inheritIO) builder.inheritIO();
+        
+        return builder;
     }
 
     public static Stream<ProcessHandle> getProcesses()
@@ -22,7 +25,7 @@ public class Process
             Optional<String> cmd = process.info().command();
             return cmd.isPresent() && cmd.get().contains(name);
         });
-
+        
         Optional<ProcessHandle> handle = filtered.findFirst();
         return handle.orElse(null);
     }
