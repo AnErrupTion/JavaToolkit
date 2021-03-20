@@ -9,7 +9,7 @@ public class Process
     {
         ProcessBuilder builder = new ProcessBuilder(cmd.split(" "));
         if (inheritIO) builder.inheritIO();
-        
+
         return builder;
     }
 
@@ -25,7 +25,7 @@ public class Process
             Optional<String> cmd = process.info().command();
             return cmd.isPresent() && cmd.get().contains(name);
         });
-        
+
         Optional<ProcessHandle> handle = filtered.findFirst();
         return handle.orElse(null);
     }

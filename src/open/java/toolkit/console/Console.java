@@ -4,13 +4,14 @@ import open.java.toolkit.Errors;
 import open.java.toolkit.System;
 import open.java.toolkit.console.ansi.Foreground;
 import open.java.toolkit.diagnostics.Process;
+
 import java.io.*;
 
 public class Console
 {
     private static final ProcessBuilder cls = Process.createProcess("cmd /c cls", true);
     private static final ProcessBuilder title = Process.createProcess("cmd /c title", true);
-    
+
     public static void writeLine(String text, LogType type)
     {
         write(text + System.newLine, type);

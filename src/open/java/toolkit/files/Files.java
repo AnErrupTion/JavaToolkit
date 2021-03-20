@@ -1,6 +1,6 @@
 package open.java.toolkit.files;
 
-import open.java.toolkit.Arrays;
+import open.java.toolkit.arrays.ArrayHelper;
 import open.java.toolkit.Errors;
 import open.java.toolkit.System;
 
@@ -10,7 +10,7 @@ public class Files
 {
     public static String readFile(String path)
     {
-        try (BufferedReader br = new BufferedReader(new FileReader(path)))
+        /*try (BufferedReader br = new BufferedReader(new FileReader(path)))
         {
             StringBuilder content = new StringBuilder();
             String line;
@@ -21,14 +21,16 @@ public class Files
             return content.toString();
         } catch (IOException ex) { Errors.newError(ex); }
 
-        return null;
+        return null;*/
+
+        return ArrayHelper.toString(readLines(path));
     }
 
     public static String[] readLines(String path)
     {
         try (BufferedReader br = new BufferedReader(new FileReader(path)))
         {
-            return Arrays.toStringArray(br.lines().toArray());
+            return br.lines().toArray(String[]::new);
         } catch (IOException ex) { Errors.newError(ex); }
 
         return null;

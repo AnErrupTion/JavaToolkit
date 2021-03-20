@@ -1,6 +1,6 @@
 package open.java.toolkit.files;
 
-import open.java.toolkit.Arrays;
+import open.java.toolkit.arrays.ArrayHelper;
 import open.java.toolkit.Errors;
 
 public class FileParser
@@ -90,7 +90,7 @@ public class FileParser
         try
         {
             String[] array = Files.readLines(key);
-            return !Arrays.isEmpty(array) ? array : null;
+            return !ArrayHelper.isEmpty(array) ? array : null;
         }
         catch (Exception ex)
         {
