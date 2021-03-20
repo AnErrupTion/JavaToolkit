@@ -1,17 +1,16 @@
 package open.java.toolkit.arrays;
 
 import open.java.toolkit.System;
-
 import java.util.*;
 
 public class ArrayHelper
 {
-    public static ArrayList<Object> removeDuplicateElements(List<Object> input)
+    public static ArrayList<String> removeDuplicateElements(List<String> input)
     {
         return new ArrayList<>(new LinkedHashSet<>(input));
     }
 
-    public static ArrayList<Object> toArrayList(Object[] input)
+    public static ArrayList<String> toArrayList(String[] input)
     {
         return new ArrayList<>(Arrays.asList(input));
     }
@@ -21,7 +20,7 @@ public class ArrayHelper
         return Arrays.stream(input).toArray(String[]::new);
     }
 
-    public static String[] toStringArray(Collection<String> input)
+    public static String[] toStringArray(List<String> input)
     {
         return input.toArray(String[]::new);
     }
@@ -31,12 +30,12 @@ public class ArrayHelper
         return array == null || array.length == 0;
     }
 
-    public static boolean isEmpty(Collection array)
+    public static boolean isEmpty(List<Object> array)
     {
         return array == null || array.size() == 0;
     }
 
-    public static String toString(Collection<String> input)
+    public static String toString(List<String> input)
     {
         return toString(toStringArray(input));
     }
