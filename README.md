@@ -11,4 +11,4 @@ Features include :<br/>
 
 # Requirements
 **IDE** IntelliJ IDEA 2020.3<br/>
-**(Adopt)OpenJDK** 11
+**OpenJDK** 11
