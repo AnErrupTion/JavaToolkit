@@ -1,17 +1,18 @@
 package open.java.toolkit.arrays.lists;
 
+import open.java.toolkit.Errors;
 import java.util.Arrays;
 
 public class EfficientList<E> implements InterfaceList<E>
 {
     private int size;
     private transient Object[] data;
-
+    
     public EfficientList(int capacity)
     {
         if (capacity < 0)
-            throw new IllegalArgumentException("Illegal capacity : " + capacity);
-
+            Errors.newError(new IllegalArgumentException("Illegal list capacity : " + capacity));
+            
         this.data = new Object[capacity];
     }
 
@@ -37,12 +38,10 @@ public class EfficientList<E> implements InterfaceList<E>
     {
         if (contains(element))
             return false;
-
-        size++;
-
-        ensureCapacity(size);
-        data[size] = element;
-
+            
+        data = Arrays.copyOf(data, size == 0 ? size + 2 : size + 1);
+        data[size++] = element;
+        
         return true;
     }
 
@@ -51,16 +50,16 @@ public class EfficientList<E> implements InterfaceList<E>
     {
         for (int i = 0; i < size; i++)
             data[i] = null;
-
+            
         size = 0;
     }
 
     @Override
     public E get(int index)
     {
-        if (index >= size)
-            throw new ArrayIndexOutOfBoundsException("Array index out of bound with index at " + index);
-
+        if (index < 0 || index >= size)
+            Errors.newError(new ArrayIndexOutOfBoundsException("Index " + index + " out of bounds for array."));
+            
         return (E) data[index];
     }
 
@@ -69,7 +68,7 @@ public class EfficientList<E> implements InterfaceList<E>
     {
         if (isEmpty())
             return false;
-
+            
         data[index] = element;
         return true;
     }
@@ -80,13 +79,13 @@ public class EfficientList<E> implements InterfaceList<E>
         int index = indexOf(element);
         if (index == -1)
             return false;
-
+            
         size--;
-
+        
         int num = size - index;
         if (num > 0)
             System.arraycopy(data, index + 1, data, index, num);
-
+            
         data[size] = null;
         return true;
     }
@@ -97,7 +96,7 @@ public class EfficientList<E> implements InterfaceList<E>
         for (int i = 0; i < size; i++)
             if (data[i] == element)
                 return i;
-
+                
         return -1;
     }
 
@@ -105,11 +104,5 @@ public class EfficientList<E> implements InterfaceList<E>
     public boolean contains(E element)
     {
         return indexOf(element) > -1;
-    }
-
-    private void ensureCapacity(int size)
-    {
-        if (size > 0 && size > this.size)
-            data = Arrays.copyOf(data, size);
     }
 }
