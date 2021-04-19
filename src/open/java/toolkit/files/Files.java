@@ -1,29 +1,25 @@
 package open.java.toolkit.files;
 
-import open.java.toolkit.arrays.ArrayHelper;
 import open.java.toolkit.Errors;
 import open.java.toolkit.System;
-
 import java.io.*;
 
 public class Files
 {
     public static String readFile(String path)
     {
-        /*try (BufferedReader br = new BufferedReader(new FileReader(path)))
+        try (BufferedReader br = new BufferedReader(new FileReader(path)))
         {
             StringBuilder content = new StringBuilder();
             String line;
-
+            
             while ((line = br.readLine()) != null)
                 content.append(line).append("\n");
-
+            
             return content.toString();
         } catch (IOException ex) { Errors.newError(ex); }
 
-        return null;*/
-
-        return ArrayHelper.toString(readLines(path));
+        return null;
     }
 
     public static String[] readLines(String path)
@@ -40,17 +36,17 @@ public class Files
     {
         File file = new File(path);
         FileInputStream input = null;
-
+        
         try
         {
             input = new FileInputStream(file);
         } catch (FileNotFoundException ex) { Errors.newError(ex); }
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-
+       
         byte[] b = new byte[(int) file.length()];
         int c;
-
+        
         try
         {
             while ((c = input.read(b)) != -1)
