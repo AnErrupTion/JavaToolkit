@@ -1,6 +1,7 @@
 package open.java.toolkit.arrays;
 
 import open.java.toolkit.System;
+
 import java.util.*;
 
 public class ArrayHelper
@@ -8,6 +9,13 @@ public class ArrayHelper
     public static ArrayList<String> removeDuplicateElements(List<String> input)
     {
         return new ArrayList<>(new LinkedHashSet<>(input));
+    }
+
+    public static ArrayList<String> removeDuplicateElements(String[] input)
+    {
+        ArrayList<String> list = new ArrayList<>(new LinkedHashSet<>());
+        Collections.addAll(list, input);
+        return list;
     }
 
     public static ArrayList<String> toArrayList(String[] input)
@@ -25,14 +33,14 @@ public class ArrayHelper
         return input.toArray(String[]::new);
     }
 
-    public static boolean isEmpty(Object[] array)
+    public static boolean isEmpty(Object[] input)
     {
-        return array == null || array.length == 0;
+        return input == null || input.length == 0;
     }
 
-    public static boolean isEmpty(List<Object> array)
+    public static boolean isEmpty(List<?> input)
     {
-        return array == null || array.size() == 0;
+        return input == null || input.size() == 0;
     }
 
     public static String toString(List<String> input)
@@ -42,6 +50,15 @@ public class ArrayHelper
 
     public static String toString(String[] input)
     {
-        return java.util.Arrays.toString(input).replace("[", "").replace("]", "").replace(", ", System.newLine);
+        return Arrays.toString(input).replace("[", "").replace("]", "").replace(", ", System.newLine);
+    }
+
+    public static int indexOf(Object[] input, Object element)
+    {
+        for (int i = 0; i < input.length; i++)
+            if (input[i] == element)
+                return i;
+
+        return -1;
     }
 }
