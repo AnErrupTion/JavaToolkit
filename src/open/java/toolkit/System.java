@@ -2,24 +2,22 @@ package open.java.toolkit;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class System
 {
     public static final String newLine = System.isWindows() ? "\r\n" : "\n";
     public static final String toolkitVersion = "1.4";
-    public static final String dateAndTime = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss").format(LocalDateTime.now());
-
+    
     public static boolean logErrors = false, errorOccurred = false, showErrors = true;
-
-    public static boolean getPropertyContains(String property, String element, boolean lowerCase)
+    
+    public static String getDateAndTime()
     {
-        String prop = java.lang.System.getProperty(property);
-        if (lowerCase) prop = prop.toLowerCase();
-        return prop.contains(element);
+        return DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss").format(LocalDateTime.now());
     }
 
     public static boolean isWindows()
     {
-        return getPropertyContains("os.name", "windows", true);
+        return java.lang.System.getProperty("os.name").toLowerCase(Locale.ENGLISH).contains("windows");
     }
 }
