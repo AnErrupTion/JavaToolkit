@@ -2,10 +2,13 @@ package open.java.toolkit.files;
 
 import open.java.toolkit.Errors;
 import open.java.toolkit.System;
+
 import java.io.*;
 
 public class Files
 {
+    private static File file;
+    
     public static String readFile(String path)
     {
         try (BufferedReader br = new BufferedReader(new FileReader(path)))
@@ -34,26 +37,19 @@ public class Files
 
     public static byte[] readBytes(String path)
     {
-        File file = new File(path);
-        FileInputStream input = null;
-        
-        try
+        try (BufferedInputStream is = new BufferedInputStream(new FileInputStream(path)))
         {
-            input = new FileInputStream(file);
-        } catch (FileNotFoundException ex) { Errors.newError(ex); }
+            byte[] bytes = new byte[is.available()];
+            int read = is.read(bytes);
+            
+            if (read > bytes.length)
+                Errors.newError(new Exception("Buffer was to small for file, read " + read + " bytes, buffer was " + bytes.length + " bytes."));
+            
+            return bytes;
+        }
+        catch (IOException ex) { Errors.newError(ex); }
 
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-       
-        byte[] b = new byte[(int) file.length()];
-        int c;
-        
-        try
-        {
-            while ((c = input.read(b)) != -1)
-                output.write(b, 0, c);
-        } catch (IOException ex) { Errors.newError(ex); }
-
-        return output.toByteArray();
+        return null;
     }
 
     public static void writeString(String path, String content, boolean append)
@@ -75,7 +71,7 @@ public class Files
             }
         } catch (IOException ex) { Errors.newError(ex); }
     }
-    
+
     public static void writeBytes(String path, byte[] content, boolean append)
     {
         try (BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(path, append)))
@@ -87,15 +83,16 @@ public class Files
 
     public static boolean fileExists(String path)
     {
-        File f = new File(path);
-        return !f.isDirectory() && f.exists();
+        file = new File(path);
+        return !file.isDirectory() && file.exists();
     }
 
     public static boolean createFile(String path)
     {
         try
         {
-            return new File(path).createNewFile();
+            file = new File(path);
+            return file.createNewFile();
         } catch (IOException ex) { Errors.newError(ex); }
 
         return false;
@@ -103,17 +100,19 @@ public class Files
 
     public static boolean createDirectory(String path)
     {
-        return new File(path).mkdir();
+        file = new File(path);
+        return file.mkdir();
     }
 
     public static boolean directoryExists(String path)
     {
-        File f = new File(path);
-        return f.isDirectory() && f.exists();
+        file = new File(path);
+        return file.isDirectory() && file.exists();
     }
 
     public static boolean delete(String path)
     {
-        return new File(path).delete();
+        file = new File(path);
+        return file.delete();
     }
 }
