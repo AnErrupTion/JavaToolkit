@@ -75,6 +75,15 @@ public class Files
             }
         } catch (IOException ex) { Errors.newError(ex); }
     }
+    
+    public static void writeBytes(String path, byte[] content, boolean append)
+    {
+        try (BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(path, append)))
+        {
+            os.write(content);
+        }
+        catch (IOException ex) { Errors.newError(ex); }
+    }
 
     public static boolean fileExists(String path)
     {
