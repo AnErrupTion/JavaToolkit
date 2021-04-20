@@ -1,7 +1,6 @@
 package open.java.toolkit.arrays;
 
 import open.java.toolkit.System;
-
 import java.util.*;
 
 public class ArrayHelper
@@ -9,13 +8,6 @@ public class ArrayHelper
     public static ArrayList<String> removeDuplicateElements(List<String> input)
     {
         return new ArrayList<>(new LinkedHashSet<>(input));
-    }
-
-    public static ArrayList<String> removeDuplicateElements(String[] input)
-    {
-        ArrayList<String> list = new ArrayList<>(new LinkedHashSet<>());
-        Collections.addAll(list, input);
-        return list;
     }
 
     public static ArrayList<String> toArrayList(String[] input)
@@ -58,7 +50,7 @@ public class ArrayHelper
         for (int i = 0; i < input.length; i++)
             if (input[i] == element)
                 return i;
-
+        
         return -1;
     }
 }
