@@ -10,6 +10,14 @@ public class FileParser
     private final boolean removeSpaces;
     private final int index;
 
+    /**
+     * Constructor for this class.
+     * @param filePath The file to read.
+     * @param commentCharacter The character which is used as a comment or "line to ignore" character.
+     * @param separator The separator character used to separate the keys and values.
+     * @param removeSpaces Whether or not to remove spaces when reading lines.
+     * @param index The index which is used with the separator. Generally, 0 is the key and 1 is the value.
+     */
     public FileParser(String filePath, String commentCharacter, String separator, boolean removeSpaces, int index)
     {
         this.filePath = filePath;
@@ -21,6 +29,11 @@ public class FileParser
         content = Files.readLines(this.filePath);
     }
 
+    /**
+     * Gets a string from a specific key.
+     * @param key The key used to get the string.
+     * @return The string.
+     */
     public String getString(String key)
     {
         for (String line : content)
@@ -33,6 +46,11 @@ public class FileParser
         return null;
     }
 
+    /**
+     * Sets a string to a new one.
+     * @param key The key used to get the string in the file.
+     * @param value The new string used to replace the old one.
+     */
     public void setString(String key, String value)
     {
         for (int i = 0; i < content.length; i++)
@@ -49,6 +67,11 @@ public class FileParser
         Files.writeLines(filePath, content, false);
     }
 
+    /**
+     * Gets an integer from a specific key.
+     * @param key The key used to get the integer.
+     * @return The integer.
+     */
     public int getInt(String key)
     {
         try
@@ -62,11 +85,21 @@ public class FileParser
         }
     }
 
+    /**
+     * Sets an integer to a new one.
+     * @param key The key used to get the integer in the file.
+     * @param value The new integer used to replace the old one.
+     */
     public void setInt(String key, int value)
     {
         setString(key, String.valueOf(value));
     }
 
+    /**
+     * Gets a boolean from a specific key.
+     * @param key The key used to get the boolean.
+     * @return The boolean.
+     */
     public boolean getBoolean(String key)
     {
         try
@@ -80,11 +113,21 @@ public class FileParser
         }
     }
 
+    /**
+     * Sets a boolean to a new one.
+     * @param key The key used to get the boolean in the file.
+     * @param value The new boolean used to replace the old one.
+     */
     public void setBoolean(String key, boolean value)
     {
         setString(key, String.valueOf(value));
     }
 
+    /**
+     * Gets a file's content from a specific key.
+     * @param key The key used to get the file's content.
+     * @return The file's content as a string array.
+     */
     public String[] getFile(String key)
     {
         try

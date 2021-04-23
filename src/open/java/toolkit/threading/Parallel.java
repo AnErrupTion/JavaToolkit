@@ -21,6 +21,11 @@ public class Parallel
     public static int threads = 25;
     private static int lastThreads = 0;
 
+    /**
+     * Performs a specific foreach loop over an array.
+     * @param elements The input array to loop over.
+     * @param operation The operation to perform on each element of the array.
+     */
     public static <T> void forEach(final T[] elements, final Operation<T> operation)
     {
         if (pool == null || lastThreads != threads)

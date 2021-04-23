@@ -2,6 +2,12 @@ package open.java.toolkit.json;
 
 public class Json
 {
+    /**
+     * Parses a value with a specific key from a JSON string.
+     * @param key The key to get the value with.
+     * @param str The JSON string to perform the parsing with.
+     * @return The parsed value.
+     */
     public static String parseValue(String key, String str)
     {
         String[] array = str.split(":");

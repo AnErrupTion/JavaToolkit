@@ -7,15 +7,31 @@ import java.util.Locale;
 public class System
 {
     public static final String newLine = System.isWindows() ? "\r\n" : "\n";
-    public static final String toolkitVersion = "1.4";
-    
     public static boolean logErrors = false, errorOccurred = false, showErrors = true;
-    
-    public static String getDateAndTime()
+
+    /**
+     * Gets the date and time formatted as a string.
+     * @param format The format of the date and time string.
+     * @return The formatted date and time string.
+     */
+    public static String getDateAndTime(String format)
     {
-        return DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss").format(LocalDateTime.now());
+        return DateTimeFormatter.ofPattern(format).format(LocalDateTime.now());
     }
 
+    /**
+     * Gets the current JavaToolkit version.
+     * @return The current JavaToolkit version.
+     */
+    public static String getToolkitVersion()
+    {
+        return "1.4";
+    }
+
+    /**
+     * Checks if the current operating system is *nix-based or Windows-based.
+     * @return Whether or not the current operating system is *nix-based or Windows-based.
+     */
     public static boolean isWindows()
     {
         return java.lang.System.getProperty("os.name").toLowerCase(Locale.ENGLISH).contains("windows");

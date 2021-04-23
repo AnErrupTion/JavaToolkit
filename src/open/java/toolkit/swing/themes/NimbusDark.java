@@ -7,6 +7,10 @@ import java.awt.*;
 
 public class NimbusDark
 {
+    /**
+     * Configures the NimbusDark there.
+     * @param frame The JFrame to configure the theme to.
+     */
     public static void configure(JFrame frame)
     {
         UIManager.put("control", new Color(60, 60, 60));

@@ -2,420 +2,175 @@ package open.java.toolkit.http;
 
 import open.java.toolkit.Errors;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLParameters;
-import javax.net.ssl.SSLSession;
 import java.io.IOException;
-import java.net.*;
+import java.net.InetSocketAddress;
+import java.net.ProxySelector;
+import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Request
 {
-    private static HttpClient.Builder client = HttpClient.newBuilder();
-    private static HttpClient built = null;
-    private static String contentType = "text/html; charset=UTF-8";
-    private static String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36";
-    private static final ArrayList<String> headers = new ArrayList<>();
+    private static HttpClient.Builder builder = HttpClient.newBuilder();
+    private static final HashMap<String, String> headers = new HashMap<>();
 
-    public static void setVersion(HttpClient.Version version)
+    private static HttpResponse.BodyHandler<?> handler = HttpResponse.BodyHandlers.ofString();
+
+    private static final String[] userAgents = new String[]
+            {
+                    "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36",
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0",
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36 OPR/75.0.3969.171",
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36 Edg/90.0.818.42",
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36 Vivaldi/3.7"
+            };
+    private static String userAgent = userAgents[0], contentType = "text/html; charset=UTF-8";
+
+    /**
+     * Gets the current HttpClient builder.
+     * @return The current HttpClient builder.
+     */
+    public static HttpClient.Builder getBuilder()
     {
-        client = client.version(version);
+        return builder;
     }
 
-    public static void setTimeout(int timeout)
-    {
-        client = client.connectTimeout(Duration.ofMillis(timeout));
-    }
-
-    public static void setFollowRedirects(HttpClient.Redirect redirect)
-    {
-        client = client.followRedirects(redirect);
-    }
-
-    public static void setProxy(ProxySelector proxy)
-    {
-        client = client.proxy(proxy);
-    }
-
-    public static void setAuthenticator(Authenticator auth)
-    {
-        client = client.authenticator(auth);
-    }
-
-    public static void setCookieHandler(CookieHandler handler)
-    {
-        client = client.cookieHandler(handler);
-    }
-
-    public static void setExecutor(Executor executor)
-    {
-        client = client.executor(executor);
-    }
-
-    public static void setPriority(int priority)
-    {
-        client = client.priority(priority);
-    }
-
-    public static void setSslContext(SSLContext context)
-    {
-        client = client.sslContext(context);
-    }
-
-    public static void setSslParameters(SSLParameters parameters)
-    {
-        client = client.sslParameters(parameters);
-    }
-
-    public static void setContentType(String contentType)
-    {
-        Request.contentType = contentType;
-    }
-
+    /**
+     * Sets the User-Agent string to a new one.
+     * @param userAgent The new User-Agent string.
+     */
     public static void setUserAgent(String userAgent)
     {
         Request.userAgent = userAgent;
     }
 
-    public static void addHeader(String name, String value)
+    /**
+     * Sets the Content-Type string to a new one.
+     * @param contentType The new Content-Type string.
+     */
+    public static void setContentType(String contentType)
     {
-        headers.add(name + ":" + value);
+        Request.contentType = contentType;
     }
 
+    /**
+     * Sets the HttpResponse BodyHandler to a new one.
+     * @param handler The new HttpResponse BodyHandler.
+     */
+    public static void setBodyHandler(HttpResponse.BodyHandler<?> handler)
+    {
+        Request.handler = handler;
+    }
+
+    /**
+     * Sets the current request timeout to a new one.
+     * @param timeout The new timeout integer, in milliseconds.
+     */
+    public static void setTimeout(int timeout)
+    {
+        builder = builder.connectTimeout(Duration.ofMillis(timeout));
+    }
+
+    /**
+     * Adds a header to the current request.
+     * @param name The header name.
+     * @param value The header value.
+     */
+    public static void addHeader(String name, String value)
+    {
+        headers.put(name, value);
+    }
+
+    /**
+     * Sets the proxy to be used within the current request.
+     * @param proxy The new proxy string, containing both IP and port with a colon separating both.
+     */
     public static void setProxy(String proxy)
     {
         String[] array = proxy.split(":");
-        setProxy(ProxySelector.of(new InetSocketAddress(array[0], Integer.parseInt(array[1]))));
+        builder = builder.proxy(ProxySelector.of(new InetSocketAddress(array[0], Integer.parseInt(array[1]))));
     }
 
-    public static void forceBuild()
+    /**
+     * Randomizes the current User-Agent.
+     */
+    public void randomizeUserAgent()
     {
-        built = client.build();
+        userAgent = userAgents[ThreadLocalRandom.current().nextInt(userAgents.length)];
     }
 
-    public static HttpClient.Builder getClientBuilder()
+    /**
+     * Sends a HTTP(S) request to a specific URL, with a specific method and BodyPublisher.
+     * @param url The URL to perform the request to.
+     * @param method The method to perform the request with.
+     * @param publisher The BodyPublisher to perform the request with.
+     * @return A HttpResponse object.
+     */
+    public static HttpResponse<?> send(String url, String method, HttpRequest.BodyPublisher publisher)
     {
-        return client;
-    }
-
-    public static HttpRequest.BodyPublisher ofFormData(Map<Object, Object> data)
-    {
-        StringBuilder builder = new StringBuilder();
-
-        for (Map.Entry<Object, Object> entry : data.entrySet())
-        {
-            if (builder.length() > 0)
-                builder.append("&");
-
-            builder.append(URLEncoder.encode(entry.getKey().toString(), StandardCharsets.UTF_8));
-            builder.append("=");
-            builder.append(URLEncoder.encode(entry.getValue().toString(), StandardCharsets.UTF_8));
-        }
-
-        return HttpRequest.BodyPublishers.ofString(builder.toString());
-    }
-
-    public static HttpResponse<String> sendGet(String url)
-    {
-        HttpRequest.Builder builder = HttpRequest.newBuilder()
-                .GET()
+        HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType);
 
-        for (String header : headers)
-        {
-            String[] array = header.split(":");
-            builder = builder.setHeader(array[0], array[1]);
-        }
+        if (method.equalsIgnoreCase("get"))
+            reqBuilder = reqBuilder.GET();
+        else if (method.equalsIgnoreCase("post"))
+            reqBuilder = reqBuilder.POST(publisher);
+        else if (method.equalsIgnoreCase("delete"))
+            reqBuilder = reqBuilder.DELETE();
+        else if (method.equalsIgnoreCase("put"))
+            reqBuilder = reqBuilder.PUT(publisher);
 
-        HttpRequest request = builder.build();
+        for (Map.Entry<String, String> entry : headers.entrySet())
+            reqBuilder = reqBuilder.setHeader(entry.getKey(), entry.getValue());
 
-        if (built == null)
-            built = client.build();
+        HttpClient client = builder.build();
+        HttpRequest request = reqBuilder.build();
 
         try
         {
-            return built.send(request, HttpResponse.BodyHandlers.ofString());
+            return client.send(request, handler);
         } catch (IOException | InterruptedException ex) { Errors.newError(ex); }
 
-        return new HttpResponse<>()
-        {
-            @Override
-            public int statusCode()
-            {
-                return 0;
-            }
-
-            @Override
-            public HttpRequest request()
-            {
-                return request;
-            }
-
-            @Override
-            public Optional<HttpResponse<String>> previousResponse()
-            {
-                return Optional.empty();
-            }
-
-            @Override
-            public HttpHeaders headers()
-            {
-                return null;
-            }
-
-            @Override
-            public String body()
-            {
-                return "";
-            }
-
-            @Override
-            public Optional<SSLSession> sslSession()
-            {
-                return Optional.empty();
-            }
-
-            @Override
-            public URI uri()
-            {
-                return URI.create("https://www.google.com");
-            }
-
-            @Override
-            public HttpClient.Version version()
-            {
-                return HttpClient.Version.HTTP_1_1;
-            }
-        };
+        return null;
     }
 
-    public static HttpResponse<String> sendPost(String url, Map<Object, Object> formData)
+    /**
+     * Sends an asynchronous HTTP(S) request to a specific URL, with a specific method and BodyPublisher.
+     * @param url The URL to perform the request to.
+     * @param method The method to perform the request with.
+     * @param publisher The BodyPublisher to perform the request with.
+     * @return A CompletableFuture object containing a HttpResponse object.
+     */
+    public static CompletableFuture<?> sendAsync(String url, String method, HttpRequest.BodyPublisher publisher)
     {
-        HttpRequest.Builder builder = HttpRequest.newBuilder()
-                .POST(ofFormData(formData))
+        HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .setHeader("User-Agent", userAgent)
                 .setHeader("Content-Type", contentType);
 
-        for (String header : headers)
-        {
-            String[] array = header.split(":");
-            builder = builder.setHeader(array[0], array[1]);
-        }
+        if (method.equalsIgnoreCase("get"))
+            reqBuilder = reqBuilder.GET();
+        else if (method.equalsIgnoreCase("post"))
+            reqBuilder = reqBuilder.POST(publisher);
+        else if (method.equalsIgnoreCase("delete"))
+            reqBuilder = reqBuilder.DELETE();
+        else if (method.equalsIgnoreCase("put"))
+            reqBuilder = reqBuilder.PUT(publisher);
 
-        HttpRequest request = builder.build();
+        for (Map.Entry<String, String> entry : headers.entrySet())
+            reqBuilder = reqBuilder.setHeader(entry.getKey(), entry.getValue());
 
-        if (built == null)
-            built = client.build();
+        HttpClient client = builder.build();
+        HttpRequest request = reqBuilder.build();
 
-        try
-        {
-            return built.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException ex) { Errors.newError(ex); }
-
-        return new HttpResponse<>()
-        {
-            @Override
-            public int statusCode()
-            {
-                return 0;
-            }
-
-            @Override
-            public HttpRequest request()
-            {
-                return request;
-            }
-
-            @Override
-            public Optional<HttpResponse<String>> previousResponse()
-            {
-                return Optional.empty();
-            }
-
-            @Override
-            public HttpHeaders headers()
-            {
-                return null;
-            }
-
-            @Override
-            public String body()
-            {
-                return "";
-            }
-
-            @Override
-            public Optional<SSLSession> sslSession()
-            {
-                return Optional.empty();
-            }
-
-            @Override
-            public URI uri()
-            {
-                return URI.create("https://www.google.com");
-            }
-
-            @Override
-            public HttpClient.Version version()
-            {
-                return HttpClient.Version.HTTP_1_1;
-            }
-        };
-    }
-
-    public static HttpResponse<String> sendPost(String url, String formData)
-    {
-        HttpRequest.Builder builder = HttpRequest.newBuilder()
-                .POST(HttpRequest.BodyPublishers.ofString(formData))
-                .uri(URI.create(url))
-                .setHeader("User-Agent", userAgent)
-                .setHeader("Content-Type", contentType);
-
-        for (String header : headers)
-        {
-            String[] array = header.split(":");
-            builder = builder.setHeader(array[0], array[1]);
-        }
-
-        HttpRequest request = builder.build();
-
-        if (built == null)
-            built = client.build();
-
-        try
-        {
-            return built.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException ex) { Errors.newError(ex); }
-
-        return new HttpResponse<>()
-        {
-            @Override
-            public int statusCode()
-            {
-                return 0;
-            }
-
-            @Override
-            public HttpRequest request()
-            {
-                return request;
-            }
-
-            @Override
-            public Optional<HttpResponse<String>> previousResponse()
-            {
-                return Optional.empty();
-            }
-
-            @Override
-            public HttpHeaders headers()
-            {
-                return null;
-            }
-
-            @Override
-            public String body()
-            {
-                return "";
-            }
-
-            @Override
-            public Optional<SSLSession> sslSession()
-            {
-                return Optional.empty();
-            }
-
-            @Override
-            public URI uri()
-            {
-                return URI.create("https://www.google.com");
-            }
-
-            @Override
-            public HttpClient.Version version()
-            {
-                return HttpClient.Version.HTTP_1_1;
-            }
-        };
-    }
-
-    public static CompletableFuture<HttpResponse<String>> sendGetAsync(String url)
-    {
-        HttpRequest.Builder builder = HttpRequest.newBuilder()
-                .GET()
-                .uri(URI.create(url))
-                .setHeader("User-Agent", userAgent)
-                .setHeader("Content-Type", contentType);
-
-        for (String header : headers)
-        {
-            String[] array = header.split(":");
-            builder = builder.setHeader(array[0], array[1]);
-        }
-
-        HttpRequest request = builder.build();
-
-        if (built == null)
-            built = client.build();
-
-        return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
-    }
-
-    public static CompletableFuture<HttpResponse<String>> sendPostAsync(String url, Map<Object, Object> formData)
-    {
-        HttpRequest.Builder builder = HttpRequest.newBuilder()
-                .POST(ofFormData(formData))
-                .uri(URI.create(url))
-                .setHeader("User-Agent", userAgent)
-                .setHeader("Content-Type", contentType);
-
-        for (String header : headers)
-        {
-            String[] array = header.split(":");
-            builder = builder.setHeader(array[0], array[1]);
-        }
-
-        HttpRequest request = builder.build();
-
-        if (built == null)
-            built = client.build();
-
-        return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
-    }
-
-    public static CompletableFuture<HttpResponse<String>> sendPostAsync(String url, String formData)
-    {
-        HttpRequest.Builder builder = HttpRequest.newBuilder()
-                .POST(HttpRequest.BodyPublishers.ofString(formData))
-                .uri(URI.create(url))
-                .setHeader("User-Agent", userAgent)
-                .setHeader("Content-Type", contentType);
-
-        for (String header : headers)
-        {
-            String[] array = header.split(":");
-            builder = builder.setHeader(array[0], array[1]);
-        }
-
-        HttpRequest request = builder.build();
-
-        if (built == null)
-            built = client.build();
-
-        return built.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+        return client.sendAsync(request, handler);
     }
 }
