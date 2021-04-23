@@ -1,0 +1,13 @@
+open.java.toolkit
+open.java.toolkit.arrays
+open.java.toolkit.arrays.lists
+open.java.toolkit.arrays.maps
+open.java.toolkit.console
+open.java.toolkit.console.ansi
+open.java.toolkit.diagnostics
+open.java.toolkit.files
+open.java.toolkit.http
+open.java.toolkit.json
+open.java.toolkit.swing
+open.java.toolkit.swing.themes
+open.java.toolkit.threading
