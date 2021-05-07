@@ -10,7 +10,7 @@ Features include :<br/>
 - **And more!**
 
 # Requirements
-**IDE** IntelliJ IDEA 2020.3<br/>
+**IDE** IntelliJ IDEA 2021.1<br/>
 **OpenJDK** 11
 
 # Documentation
