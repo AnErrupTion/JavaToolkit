@@ -58,7 +58,7 @@ public class Files
             int read = is.read(bytes);
 
             if (read > bytes.length)
-                Errors.newError(new Exception("Buffer was to small for file, read " + read + " bytes, buffer was " + bytes.length + " bytes."));
+                Errors.newError(new Exception("Buffer was too small for file, read " + read + " bytes, buffer was " + bytes.length + " bytes."));
 
             return bytes;
         }
