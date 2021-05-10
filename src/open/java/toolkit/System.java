@@ -25,7 +25,7 @@ public class System
      */
     public static String getToolkitVersion()
     {
-        return "1.4";
+        return "1.5";
     }
 
     /**

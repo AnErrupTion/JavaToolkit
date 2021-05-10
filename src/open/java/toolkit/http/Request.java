@@ -100,7 +100,7 @@ public class Request
     /**
      * Randomizes the current User-Agent.
      */
-    public void randomizeUserAgent()
+    public static void randomizeUserAgent()
     {
         userAgent = userAgents[ThreadLocalRandom.current().nextInt(userAgents.length)];
     }
