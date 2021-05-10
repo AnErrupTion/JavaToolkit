@@ -132,8 +132,7 @@ public class FileParser
     {
         try
         {
-            String[] array = Files.readLines(key);
-            return !ArrayHelper.isEmpty(array) ? array : null;
+            return Files.readLines(key);
         }
         catch (Exception ex)
         {
