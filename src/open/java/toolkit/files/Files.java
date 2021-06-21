@@ -31,6 +31,17 @@ public class Files
     }
 
     /**
+     * Reads a directory's content, as a string array.
+     * @param path The path of the directory to read from.
+     * @return The directory's content, as a string array.
+     */
+    public static String[] readDirectory(String path)
+    {
+        file = new File(path);
+        return file.list();
+    }
+
+    /**
      * Reads a file's content, as a string array.
      * @param path The path of the file to read from.
      * @return The file's content, as a string array.
